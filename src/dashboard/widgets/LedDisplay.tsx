@@ -28,69 +28,60 @@ function Led(props) {
   if (props.value === undefined) {
     classColor = classColor + " led-blank";
   }
-  
-  const pxSize = props.actualWidth/10+"px";
-  const marginLED = props.actualWidth/20+"px";
-  const marginLEDTOP = props.actualWidth/40+"px";
-  
-  const styleLED: CSSProperties = {height: pxSize, width: pxSize, borderRadius: pxSize, marginTop: marginLEDTOP};
+  const styleLED: CSSProperties = {
+    width: props.radius, 
+    height: props.radius, 
+    borderRadius: props.radius, 
+    lineHeight: props.radius+ "px",  
+    textAlign: "center",
+    fontSize: props.radius/4,
+  };
 
-  return <span style={styleLED} className={classColor}>{props.value}</span>;
+  return <span  className={classColor} style={styleLED}>{props.value} </span>;
 }
 
 
 class LedReadOnly extends Component<Props> {
   public render() {
     const { name } = this.deviceAndAttribute();
-
-    const {actualWidth} = this.props;
-    const fontSizeC = actualWidth/25;
-    const marginLabel = actualWidth/10;
-
     const value = this.checkCondition();
-    const style: CSSProperties = {height: "30px",padding: "0.1em", whiteSpace: "nowrap", fontSize: fontSizeC};
 
-    const styleLable: CSSProperties = {marginLeft: marginLabel, fontSize: (fontSizeC*2)};
+    const {actualWidth, actualHeight} = this.props;
+    const radius = Math.min(actualWidth, actualHeight);
+    const lineH = radius+ "px";
 
-    let inner;
+    const styleLable: CSSProperties = {marginLeft: radius, lineHeight: lineH, fontSize: radius/4};
+    const styleWidgetPanel: CSSProperties = {height: "30px"};
 
-    if(this.props.inputs.showDevice && this.props.inputs.showValue)
+  const inner = [<Fragment></Fragment>];
+
+    if(this.props.inputs.showValue)
     {
-      inner = (
-        <Fragment>
+      inner.push(
         <Led
-          condition={value}
-          color={this.props.inputs.classColor}
-          value={this.props.inputs.attribute.value}
-          actualWidth={this.props.actualWidth}
+          condition = {value}
+          color = {this.props.inputs.classColor}
+          radius = {radius}
         />
-        <a style={styleLable}>:{" "}{name}</a>
-      </Fragment>
       );
     }
-    else if(!this.props.inputs.showDevice && this.props.inputs.showValue)
+    else 
     {
-      inner = (
-        <Fragment>
+      inner.push(
         <Led
-          condition={value}
-          color={this.props.inputs.classColor}
-          value={this.props.inputs.attribute.value}
-          actualWidth={this.props.actualWidth}
+          condition = {value}
+          color = {this.props.inputs.classColor}
+          value = {this.props.inputs.attribute.value}
+          radius = {radius}
         />
-      </Fragment>
       );
     }
-    else
+    if(this.props.inputs.showDevice)
     {
-      inner = (
-        <Fragment>
-        <Led condition={value} color={this.props.inputs.classColor} />
-      </Fragment>
-      );
+      inner.push( <a style = {styleLable}>:{" "}{name}</a>);
     }
-
-    return <div style={style}>{inner} </div>;
+    
+    return <div style = {styleWidgetPanel}>{inner}</div>;
   }
 
   private checkCondition(): any {
@@ -203,7 +194,7 @@ export const definition: WidgetDefinition<Inputs> = {
     },
     showValue: {
       type: "boolean",
-      label: "Display Value",
+      label: "Display Value (Inside LED)",
       default: false
     }
   }
