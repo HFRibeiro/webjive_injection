@@ -1,0 +1,28 @@
+.ValueDisplay.no-value {
+    color: lightgray;
+}
+
+.ValueDisplay canvas {
+    max-width: 100%;
+}
+
+.ValueDisplay.DevString p,
+.ValueDisplay.DevEncoded p {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.ValueDisplay.DevDouble {
+    word-break: break-all;
+}
+
+.ValueDisplay p.monospace {
+    font-family: monospace;
+    white-space: pre;
+    overflow: scroll;
+    text-indent: unset;
+}
+
+.ValueDisplay.DevEncoded .invalid-json {
+    color: red;
+}

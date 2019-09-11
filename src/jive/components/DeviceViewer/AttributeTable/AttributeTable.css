@@ -1,0 +1,88 @@
+.AttributeTable table {
+  width: 100%;
+}
+
+.AttributeTable td {
+  /* white-space: pre; */
+  padding: 0.25em;
+  padding-right: 1em;
+}
+
+/* .AttributeTable td.name {
+  width: 1%;
+  height: 3em; /* Unpretty way of making all rows equally high. Are there better methods? * /
+} */
+
+.AttributeTable td.quality-name {
+  white-space: nowrap;
+  height: 2.5em;
+  width: 1%;
+}
+
+.AttributeTable td.description {
+  width: 1%;
+  padding-right: 0.25em;
+}
+
+.AttributeTable td.quality {
+  width: 7em;
+  padding-left: 0.25em;
+}
+
+.AttributeTable td.edit {
+  width: 1%;
+  padding-left: 1em;
+  color: gray;
+}
+
+.AttributeTable td.edit.writable:hover {
+  cursor: pointer;
+}
+
+.AttributeTable td.edit:hover i {
+  color: black;
+}
+
+.AttributeTable .view {
+  color: gray;
+}
+
+.AttributeTable .view:hover {
+  color: black;
+  cursor: pointer;
+}
+
+.AttributeTable .QualityIndicator {
+  color: white;
+  border-radius: 0.35em;
+  padding: 0.25em;
+  font-size: small;
+  margin-right: 0.25em;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.AttributeTable .QualityIndicator.valid {
+  background-color: #5c5;
+}
+
+.AttributeTable .QualityIndicator.invalid {
+  background-color: gray;
+}
+
+.AttributeTable .QualityIndicator.changing {
+  background-color: lightskyblue;
+}
+
+.AttributeTable .QualityIndicator.alarm {
+  background-color: orange;
+}
+
+.AttributeTable .QualityIndicator.warning {
+  background-color: orange;
+}
+
+.AttributeTable .DataFormatChooser {
+  margin-bottom: 1em;
+}
