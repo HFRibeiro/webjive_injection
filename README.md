@@ -1,31 +1,13 @@
-# Description
+# Socket sender:
 
-With this device explorer built on TangoGQL, you can:
+```
+{"type":"start","payload":{"query":"\nsubscription Attributes($fullNames: [String]!) {\n  attributes(fullNames: $fullNames) {\n    device\n    attribute\n    value\n    writeValue\n    timestamp\n  }\n}","variables":{"fullNames":["sys/tg_test/1/double_scalar"]}}}
+```
 
-1. View a list of all Tango devices
-2. View and modify device properties
-3. View and modify device attributes
-4. View and execute device commands
-5. Create web interfaces for interacting with Tango devices (on /&lt;tangoDB&gt;/dashboard)
+# Socket reciver:
 
-# Usage
+```
+{"type": "data", "payload": {"data": {"attributes": {"device": "sys/tg_test/1", "attribute": "double_scalar", "value": 181.01969624669448, "writeValue": 0.0, "timestamp": 1568211918.50133}}}}
+```
 
-1. Clone the repository.
-2. Run `npm install`.
-3. Type `npm start`.
 
-Minimum node version: 7.6 (introduced async/wait)
-
-Verified working node version: 9.11.2 (currently used by the dockerfile)
-
-# Online demo
-
-https://webjive-demo.maxiv.lu.se/demodb (log in with demo/demo)
-
-# For developers
-
-* [How to create a widget](Widgets.md)
-
-# Authors
-
-WebJive was written by the KITS Group at MAX IV Laboratory .
