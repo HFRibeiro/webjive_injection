@@ -52,11 +52,14 @@ export function attributeEmitter(
           variables
         }
       });
-
+      console.log("startMessage: ");
+      console.log(startMessage);
       socket.send(startMessage);
     });
 
     socket.addEventListener("message", msg => {
+      //console.log(process.env.REACT_APP_SECRET_NAME);
+      console.log("Recieve: ");
       console.log(msg.data);
       const frame = JSON.parse(msg.data);
       if (frame.type === "data" && frame.payload.error == null) {

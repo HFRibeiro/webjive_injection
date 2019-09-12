@@ -8,6 +8,8 @@ import UserAware from "../shared/user/components/UserAware";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUndo, faRedo } from '@fortawesome/free-solid-svg-icons'
 
+require('dotenv').config()
+
 library.add( faUndo, faRedo)
 
 export default class App extends Component {

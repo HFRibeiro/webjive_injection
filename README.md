@@ -10,4 +10,10 @@
 {"type": "data", "payload": {"data": {"attributes": {"device": "sys/tg_test/1", "attribute": "double_scalar", "value": 181.01969624669448, "writeValue": 0.0, "timestamp": 1568211918.50133}}}}
 ```
 
+### Installs
+
+```
+npm install --save-dev dotenv
+```
+
 
