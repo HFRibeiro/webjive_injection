@@ -29,7 +29,7 @@ let maxWidget = 0;
 let count = 0;
 const HISTORY_LIMIT = 1000;
 
-let time1, time2;
+let intervalObj;
 
 interface RuntimeErrorDescriptor {
   type: "warning" | "error";
@@ -117,6 +117,36 @@ interface State {
   hasInitialized: boolean;
 }
 
+
+function myFunc(arg, arg2) {
+  //console.log(arg.state);
+  var ArrayAttribute = new Array();
+  for(var i=0;i<arg2.widgets.length;i++)
+  {
+    if(arg2.widgets[i].inputs.attribute != undefined) ArrayAttribute.push(arg2.widgets[i].inputs.attribute.attribute);
+  }
+  
+  let uniqueArrayAttribute = ArrayAttribute.filter(function(elem, pos) {
+    return ArrayAttribute.indexOf(elem) == pos;
+  });
+
+  //console.log(uniqueArrayAttribute);
+  
+  let newAttributeValues =  {};
+  for(var i=0; i<uniqueArrayAttribute.length; i++)
+  {
+    let JsonString = '{"sys/tg_test/1/';
+    JsonString += String(uniqueArrayAttribute[i]);
+    JsonString += '": {"value": '+Math.floor((Math.random() * 999) + 1)+',"writeValue": 0 , "timestamp": '+Date.now()+'}}';
+    Object.assign(newAttributeValues, JSON.parse(JsonString));
+  }
+
+
+  //let newAttributeValues = JSON.parse('{"sys/tg_test/1/double_scalar": {"value": '+Math.floor((Math.random() * 999) + 1)+',"writeValue": 0 , "timestamp": '+Date.now()+'}}');
+  
+  arg.setState({ attributeValues: newAttributeValues });
+}
+
 export default class RunCanvas extends Component<Props, State> {
   private unsubscribe?: () => void;
 
@@ -146,7 +176,10 @@ export default class RunCanvas extends Component<Props, State> {
 
     this.handleInvalidation = this.handleInvalidation.bind(this);
     this.handleNewFrame = this.handleNewFrame.bind(this);
+    
+    intervalObj = setInterval(myFunc, 100, this, props);
   }
+  
 
   public componentDidMount() {
     this.initialize();
@@ -199,14 +232,18 @@ export default class RunCanvas extends Component<Props, State> {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+    clearInterval(intervalObj);
   }
 
   public render() {
+    /*
     if(first)
     {
+      console.log('render');
       console.time('timer_init_dashboard');
       first = false;
     }
+    */
     const { widgets } = this.props;
     const { t0, hasInitialized, unrecoverableError } = this.state;
 
@@ -272,20 +309,20 @@ export default class RunCanvas extends Component<Props, State> {
             </div>
           );
         });
-        
+        /*
         if(count == maxWidget) {
           console.timeEnd('timer_init_dashboard');
           count = 0;
           first = true;
         } 
         else count ++;
+        */
     return (
       <div className="Canvas run">
         <RuntimeErrors errors={this.state.runtimeErrors} />
         {widgetsToRender}
       </div>
     );
-    console.log("Stop Render");
   }
 
   private resolveAttributeValue(name: string) {
