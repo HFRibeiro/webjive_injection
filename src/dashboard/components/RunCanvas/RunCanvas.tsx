@@ -24,7 +24,12 @@ import {
 
 import "./RunCanvas.css";
 
+let first = true;
+let maxWidget = 0;
+let count = 0;
 const HISTORY_LIMIT = 1000;
+
+let time1, time2;
 
 interface RuntimeErrorDescriptor {
   type: "warning" | "error";
@@ -148,8 +153,11 @@ export default class RunCanvas extends Component<Props, State> {
   }
 
   private async initialize() {
+
     const { widgets, tangoDB } = this.props;
     const fullNames = extractFullNamesFromWidgets(widgets);
+
+    maxWidget = widgets.length;
 
     const attributeMetadata = await TangoAPI.fetchAttributeMetadata(
       tangoDB,
@@ -184,6 +192,7 @@ export default class RunCanvas extends Component<Props, State> {
     this.unsubscribe = startEmission(this.handleNewFrame);
 
     this.setState({ hasInitialized: true });
+
   }
 
   public componentWillUnmount() {
@@ -193,6 +202,11 @@ export default class RunCanvas extends Component<Props, State> {
   }
 
   public render() {
+    if(first)
+    {
+      console.time('timer_init_dashboard');
+      first = false;
+    }
     const { widgets } = this.props;
     const { t0, hasInitialized, unrecoverableError } = this.state;
 
@@ -258,13 +272,20 @@ export default class RunCanvas extends Component<Props, State> {
             </div>
           );
         });
-
+        
+        if(count == maxWidget) {
+          console.timeEnd('timer_init_dashboard');
+          count = 0;
+          first = true;
+        } 
+        else count ++;
     return (
       <div className="Canvas run">
         <RuntimeErrors errors={this.state.runtimeErrors} />
         {widgetsToRender}
       </div>
     );
+    console.log("Stop Render");
   }
 
   private resolveAttributeValue(name: string) {

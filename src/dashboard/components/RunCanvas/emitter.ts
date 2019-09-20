@@ -33,8 +33,8 @@ function socketUrl(tangoDB: string) {
 
 function createSocket(tangoDB: string) {
   var wsUri = "ws://127.0.0.1:1234";
-  //return new WebSocket(socketUrl(tangoDB), "graphql-ws");
-  return new WebSocket(wsUri);
+  return new WebSocket(socketUrl(tangoDB), "graphql-ws");
+  //return new WebSocket(wsUri);
 }
 
 export function attributeEmitter(
@@ -52,15 +52,15 @@ export function attributeEmitter(
           variables
         }
       });
-      console.log("startMessage: ");
-      console.log(startMessage);
+      //console.log("startMessage: ");
+      //console.log(startMessage);
       socket.send(startMessage);
     });
 
     socket.addEventListener("message", msg => {
       //console.log(process.env.REACT_APP_SECRET_NAME);
-      console.log("Recieve: ");
-      console.log(msg.data);
+      //console.log("Recieve: ");
+      //console.log(msg.data);
       const frame = JSON.parse(msg.data);
       if (frame.type === "data" && frame.payload.error == null) {
         emitHandler(frame.payload.data.attributes as AttributeFrame);
