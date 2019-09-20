@@ -29,6 +29,8 @@ let maxWidget = 0;
 let count = 0;
 const HISTORY_LIMIT = 1000;
 
+const UPDATE_TIME = 250;
+
 let intervalObj;
 
 interface RuntimeErrorDescriptor {
@@ -123,17 +125,17 @@ function myFunc(arg, arg2) {
   var ArrayAttribute = new Array();
   for(var i=0;i<arg2.widgets.length;i++)
   {
-    if(arg2.widgets[i].inputs.attribute != undefined) ArrayAttribute.push(arg2.widgets[i].inputs.attribute.attribute);
+    if(arg2.widgets[i].inputs.attribute !== undefined) ArrayAttribute.push(arg2.widgets[i].inputs.attribute.attribute);
   }
   
   let uniqueArrayAttribute = ArrayAttribute.filter(function(elem, pos) {
-    return ArrayAttribute.indexOf(elem) == pos;
+    return ArrayAttribute.indexOf(elem) === pos;
   });
 
   //console.log(uniqueArrayAttribute);
   
   let newAttributeValues =  {};
-  for(var i=0; i<uniqueArrayAttribute.length; i++)
+  for(i=0; i<uniqueArrayAttribute.length; i++)
   {
     let JsonString = '{"sys/tg_test/1/';
     JsonString += String(uniqueArrayAttribute[i]);
@@ -177,7 +179,7 @@ export default class RunCanvas extends Component<Props, State> {
     this.handleInvalidation = this.handleInvalidation.bind(this);
     this.handleNewFrame = this.handleNewFrame.bind(this);
     
-    intervalObj = setInterval(myFunc, 100, this, props);
+    intervalObj = setInterval(myFunc, UPDATE_TIME, this, props);
   }
   
 
