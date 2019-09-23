@@ -29,7 +29,7 @@ let maxWidget = 0;
 let count = 0;
 const HISTORY_LIMIT = 1000;
 
-const UPDATE_TIME = 250;
+const UPDATE_TIME = 100;
 
 let intervalObj;
 
@@ -238,14 +238,14 @@ export default class RunCanvas extends Component<Props, State> {
   }
 
   public render() {
-    /*
+    
     if(first)
     {
       console.log('render');
       console.time('timer_init_dashboard');
       first = false;
     }
-    */
+    
     const { widgets } = this.props;
     const { t0, hasInitialized, unrecoverableError } = this.state;
 
@@ -311,14 +311,10 @@ export default class RunCanvas extends Component<Props, State> {
             </div>
           );
         });
-        /*
-        if(count == maxWidget) {
-          console.timeEnd('timer_init_dashboard');
-          count = 0;
-          first = true;
-        } 
-        else count ++;
-        */
+
+        console.timeEnd('timer_init_dashboard');
+        first = true;
+        
     return (
       <div className="Canvas run">
         <RuntimeErrors errors={this.state.runtimeErrors} />
