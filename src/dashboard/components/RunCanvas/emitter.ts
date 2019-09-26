@@ -55,6 +55,7 @@ export function attributeEmitter(
       //console.log("startMessage: ");
       //console.log(startMessage);
       socket.send(startMessage);
+      console.timeEnd('initialize');
     });
 
     socket.addEventListener("message", msg => {

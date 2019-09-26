@@ -25,8 +25,8 @@ import {
 import "./RunCanvas.css";
 
 let first = true;
-let maxWidget = 0;
-let count = 0;
+let maxWidget = 0,maxAttr = 0;
+let countRender = 0, count = 0;
 const HISTORY_LIMIT = 1000;
 
 const UPDATE_TIME = 100;
@@ -119,6 +119,36 @@ interface State {
   hasInitialized: boolean;
 }
 
+function getMaxAttributes(arg1)
+{
+  console.log(arg1);
+  var ArrayAttribute = new Array();
+  for(var i=0;i<arg1.widgets.length;i++)
+  {
+    if(arg1.widgets[i].inputs.attribute !== undefined) ArrayAttribute.push(arg1.widgets[i].inputs.attribute.attribute);
+    else if(arg1.widgets[i].inputs.attributes !== undefined) 
+    {
+      if(arg1.widgets[i].inputs.attributes[0].attribute !== undefined){
+        ArrayAttribute.push(arg1.widgets[i].inputs.attributes[0].attribute.attribute);
+      } 
+    }
+    else if(arg1.widgets[i].inputs.dependent !== undefined && arg1.widgets[i].inputs.independent !== undefined) 
+    {
+      console.log("push: "+arg1.widgets[i].inputs.dependent.attribute);
+      console.log("push: "+arg1.widgets[i].inputs.independent.attribute);
+
+        ArrayAttribute.push(arg1.widgets[i].inputs.dependent.attribute);
+        ArrayAttribute.push(arg1.widgets[i].inputs.independent.attribute);
+    }
+  }
+  
+  let uniqueArrayAttribute = ArrayAttribute.filter(function(elem, pos) {
+    return ArrayAttribute.indexOf(elem) === pos;
+  });
+
+  console.log("uniqueArrayAttribute.length: "+uniqueArrayAttribute.length);
+  return uniqueArrayAttribute.length;
+}
 
 function myFunc(arg, arg2) {
   //console.log(arg.state);
@@ -132,7 +162,7 @@ function myFunc(arg, arg2) {
     return ArrayAttribute.indexOf(elem) === pos;
   });
 
-  //console.log(uniqueArrayAttribute);
+  console.log(uniqueArrayAttribute.length);
   
   let newAttributeValues =  {};
   for(i=0; i<uniqueArrayAttribute.length; i++)
@@ -179,7 +209,7 @@ export default class RunCanvas extends Component<Props, State> {
     this.handleInvalidation = this.handleInvalidation.bind(this);
     this.handleNewFrame = this.handleNewFrame.bind(this);
     
-    intervalObj = setInterval(myFunc, UPDATE_TIME, this, props);
+    //intervalObj = setInterval(myFunc, UPDATE_TIME, this, props);
   }
   
 
@@ -188,6 +218,8 @@ export default class RunCanvas extends Component<Props, State> {
   }
 
   private async initialize() {
+
+    console.time('initialize');
 
     const { widgets, tangoDB } = this.props;
     const fullNames = extractFullNamesFromWidgets(widgets);
@@ -228,6 +260,8 @@ export default class RunCanvas extends Component<Props, State> {
 
     this.setState({ hasInitialized: true });
 
+    maxAttr = getMaxAttributes(this.props);
+
   }
 
   public componentWillUnmount() {
@@ -238,14 +272,10 @@ export default class RunCanvas extends Component<Props, State> {
   }
 
   public render() {
-    
-    if(first)
-    {
-      console.log('render');
-      console.time('timer_init_dashboard');
-      first = false;
-    }
-    
+
+    //if(countRender == 0) console.time('render');
+    //console.log('render: '+maxAttr);
+
     const { widgets } = this.props;
     const { t0, hasInitialized, unrecoverableError } = this.state;
 
@@ -312,9 +342,21 @@ export default class RunCanvas extends Component<Props, State> {
           );
         });
 
-        console.timeEnd('timer_init_dashboard');
-        first = true;
-        
+    if(countRender == maxAttr) {
+      console.timeEnd('render');
+      console.time('render');
+
+      console.log(count);
+      countRender = 0;
+    } 
+    else {
+      //console.log("countRender: "+countRender);
+      countRender++;
+    } 
+    count++;
+
+    
+
     return (
       <div className="Canvas run">
         <RuntimeErrors errors={this.state.runtimeErrors} />
@@ -496,8 +538,10 @@ export default class RunCanvas extends Component<Props, State> {
       );
       return;
     }
-
+    //console.time("handleNewFrame");
+    
     const { device, attribute, value, writeValue, timestamp } = frame;
     this.recordAttribute(device, attribute, value, writeValue, timestamp);
+    //console.timeEnd("handleNewFrame");
   }
 }
