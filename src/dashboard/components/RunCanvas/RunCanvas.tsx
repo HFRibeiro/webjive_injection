@@ -134,8 +134,8 @@ function getMaxAttributes(arg1)
     }
     else if(arg1.widgets[i].inputs.dependent !== undefined && arg1.widgets[i].inputs.independent !== undefined) 
     {
-      console.log("push: "+arg1.widgets[i].inputs.dependent.attribute);
-      console.log("push: "+arg1.widgets[i].inputs.independent.attribute);
+      //console.log("push: "+arg1.widgets[i].inputs.dependent.attribute);
+      //console.log("push: "+arg1.widgets[i].inputs.independent.attribute);
 
         ArrayAttribute.push(arg1.widgets[i].inputs.dependent.attribute);
         ArrayAttribute.push(arg1.widgets[i].inputs.independent.attribute);
@@ -151,6 +151,8 @@ function getMaxAttributes(arg1)
 }
 
 function myFunc(arg, arg2) {
+  //console.log(arg);
+  /*
   //console.log(arg.state);
   var ArrayAttribute = new Array();
   for(var i=0;i<arg2.widgets.length;i++)
@@ -177,6 +179,7 @@ function myFunc(arg, arg2) {
   //let newAttributeValues = JSON.parse('{"sys/tg_test/1/double_scalar": {"value": '+Math.floor((Math.random() * 999) + 1)+',"writeValue": 0 , "timestamp": '+Date.now()+'}}');
   
   arg.setState({ attributeValues: newAttributeValues });
+  */
 }
 
 export default class RunCanvas extends Component<Props, State> {
@@ -260,7 +263,7 @@ export default class RunCanvas extends Component<Props, State> {
 
     this.setState({ hasInitialized: true });
 
-    maxAttr = getMaxAttributes(this.props);
+    maxAttr = getMaxAttributes(this.props)-1;
 
   }
 
